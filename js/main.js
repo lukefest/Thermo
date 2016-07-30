@@ -2,9 +2,9 @@
 
 - Sign up for openweathermap.org and generate an API key.
 - User either $.ajax or $.get to pull weather current data for London
-- Print the temperature in console.
+- Print the currentTemperature in console.
 - Possible next steps
-- 1: Display the temperature in the UI rather than the console
+- 1: Display the currentTemperature in the UI rather than the console
 - 2: Display an icon or image depending on the current weather
 - 3: add a form prompting user for the city.
 - 4: add a toggle for switching between farenheit and celcius
@@ -27,7 +27,7 @@ var currentLocationData = {
 var weatherUrl =
 
 	//base URL
-	'http://api.openweathermap.org/data/2.5/weather?' +
+	'api.openweathermap.org/data/2.5/weather?' +
 
 	// latitude (from currentLocationData, above)
 	'lat=' +
@@ -50,19 +50,19 @@ app.getCurrentWeather = function(){
 	$.get(weatherUrl, function( currentWeatherData ){
 
 		// Raw temp data
-		var temperature = currentWeatherData.main.temp;
+		var currentTemperature = currentWeatherData.main.temp;
 
 		// Round down and stick 'F' at the end
-		// var inKelvin = Math.floor( temperature )+'K';
+		// var inKelvin = Math.floor( currentTemperature )+'K';
 
 		// Round down and stick 'C' at the end
-		var inCelsius =  Math.round(temperature - 273.15) +'℃';
+		var currentTempInCelsius =  Math.round(currentTemperature - 273.15) +'℃';
 
 		// // print
 		// console.log( 'Temp in K: ' + inKelvin );
-		// console.log( 'Temp in C: ' + inCelsius );
+		// console.log( 'Temp in C: ' + currentTempInCelsius );
 
-		$( '.js_temprature' ).append( inCelsius );
+		$( '.js_temprature' ).append( currentTempInCelsius );
 
 	});
 
