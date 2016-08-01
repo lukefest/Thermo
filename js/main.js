@@ -42,8 +42,8 @@ var weatherUrl =
 	'ac87f301d099eb66d6de796e5fd50b47'
 ;
 
-//Stores current weather
-app.getCurrentWeather = function(){
+//Stores current temperature
+app.getCurrentWeatherInfo = function(){
 
 	// weatherUrl hooks up to URL
 	// puts data into currentWeatherData
@@ -51,18 +51,22 @@ app.getCurrentWeather = function(){
 
 		// Raw temp data
 		var currentTemperature = currentWeatherData.main.temp;
+		var currentLocationName = currentWeatherData.name;
 
-		// Round down and stick 'F' at the end
+		// Round down temperature and stick 'F' at the end
 		// var inKelvin = Math.floor( currentTemperature )+'K';
 
-		// Round down and stick 'C' at the end
+		// Round down temperature and stick 'C' at the end
 		var currentTempInCelsius =  Math.round(currentTemperature - 273.15) +'℃';
 
 		// // print
 		// console.log( 'Temp in K: ' + inKelvin );
 		// console.log( 'Temp in C: ' + currentTempInCelsius );
 
-		$( '.js_temprature' ).append( currentTempInCelsius );
+		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
+		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
+
+
 
 	});
 
@@ -71,7 +75,7 @@ app.getCurrentWeather = function(){
 // What happens on init
 app.init = function(){
 
-		app.getCurrentWeather();
+		app.getCurrentWeatherInfo();
 
 		console.log( 'Source URL: '+ weatherUrl );
 
