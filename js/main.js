@@ -27,7 +27,7 @@ var currentLocationData = {
 var weatherUrl =
 
 	//base URL
-	'api.openweathermap.org/data/2.5/weather?' +
+	'http://api.openweathermap.org/data/2.5/weather?' +
 
 	// latitude (from currentLocationData, above)
 	'lat=' +
