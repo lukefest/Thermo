@@ -15,6 +15,10 @@
 // App container... that doesnt seem to contain anything
 var app = {};
 
+
+
+
+
 // Contains location data - TODO: make dynamic with HTML getLocation
 var currentLocationData = {
 
@@ -23,7 +27,7 @@ var currentLocationData = {
 
 };
 
-//Smart URL feeding off currentLocationData
+//URL constructed by feeding off currentLocationData above
 var weatherUrl =
 
 	//base URL
@@ -42,7 +46,7 @@ var weatherUrl =
 	'ac87f301d099eb66d6de796e5fd50b47'
 ;
 
-//Stores current temperature
+//Gets and stores current weather info based on constructed URL above
 app.getCurrentWeatherInfo = function(){
 
 	// weatherUrl hooks up to URL
@@ -72,11 +76,13 @@ app.getCurrentWeatherInfo = function(){
 
 };
 
-// What happens on init
+// When page loads - TODO: add in geolocation step at start
 app.init = function(){
 
+		// uses constructed URL to display location name and weather info
 		app.getCurrentWeatherInfo();
 
+		// prints constructed URL in console for debugging purposes
 		console.log( 'Source URL: '+ weatherUrl );
 
 };
