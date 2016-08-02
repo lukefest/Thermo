@@ -144,11 +144,13 @@ Load fonts
       font-size: calc(100vw/100*20);
       z-index:2;
       font-weight: 400;
+      -webkit-margin-before: 0.2em;
+      -webkit-margin-after: 0.2em;
    }
 
    .summary {
       color: rgba(255, 255, 255, 0.9);
-      font-size: calc(100vw/100*5);
+      font-size: 2em;
       font-weight: 300;
    }
 
