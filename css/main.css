@@ -140,11 +140,16 @@ Load fonts
       display:block;
       position: relative;
       /*height: 4em;*/
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.9);
       font-size: calc(100vw/100*20);
-      margin-top: 20vh;
       z-index:2;
       font-weight: 400;
+   }
+
+   .summary {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: calc(100vw/100*5);
+      font-weight: 300;
    }
 
    /* ========= SPINNER ========= */
@@ -154,7 +159,7 @@ Load fonts
      position: relative;
      width: calc(100vw/100*10);
      height: calc(100vw/100*10);
-     margin-top: 20vh;
+     margin-top: 13vh;
    }
 
    /*.spinner_hidden {

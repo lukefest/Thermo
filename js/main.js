@@ -15,9 +15,25 @@
 // App container... that doesnt seem to contain anything
 var app = {};
 
+// check for Geolocation support
+if (navigator.geolocation) {
+	console.log('Geolocation is supported!');
+	}
+	else {
+  console.log('Geolocation is not supported for this Browser/OS version yet.');
+}
 
+//Obtain user location cordinatess
 
-
+	var startPos;
+	var geoSuccess = function(position) {
+	  startPos = position;
+	  console.log('lat =' + startPos.coords.latitude);
+	  console.log('long =' + startPos.coords.longitude);
+		console.log( geoSuccess );
+	};
+	navigator.geolocation.getCurrentPosition(geoSuccess)
+;
 
 // Contains location data - TODO: make dynamic with HTML getLocation
 var currentLocationData = {
@@ -26,7 +42,6 @@ var currentLocationData = {
 	longitude: '-0.098994'
 
 };
-
 
 //URL constructed by feeding off currentLocationData above
 var weatherUrl =
@@ -43,65 +58,51 @@ var weatherUrl =
 
 	// longitude (from currentLocationData, above)
 	',' +
-	currentLocationData.longitude
+	currentLocationData.longitude +
 
+	// sets to local units
+	'?units=auto'
 
 ;
 
+// uses constructed URL to display location name and weather info
+$.ajax( {
+	url: weatherUrl,
+	dataType: "jsonp",
 
-$.ajax({
-  url: weatherUrl,
-  dataType: "jsonp",
-  success: function (currentWeatherData) {
+	success: function (currentWeatherData) {
 
-			console.log('Dark Sky is working!');
+		console.log('Dark Sky is working!');
 
-			console.log(currentWeatherData);
+		console.log(currentWeatherData);
 
-			// Raw temp data
-			var currentTemperature = currentWeatherData.currently.temperature;
-			var currentLocationName = currentWeatherData.timezone;
+		// Create raw weather data variables
+		var currentTemperature = currentWeatherData.currently.temperature;
+		var currentLocationName = currentWeatherData.timezone;
+		var currentSummary = currentWeatherData.minutely.summary;
+		var currentIcon = currentWeatherData.currently.icon;
 
-			// Round down temperature and convert to C, then put '℃' at the end
-			var currentTempInCelsius =  Math.round( (currentTemperature - 32) * 0.5556 ) +'℃';
+		// Round down temperature and convert to C, then put '℃' at the end
+		var currentTempRounded =  Math.round( currentTemperature );
 
-			$( '.thermometer h1:first-of-type' ).text( currentLocationName );
-			$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
+		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
+		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempRounded+'℃' + '</p>' );
+		$( '.summary' ).text( currentSummary );
 
-  }
+		// console.log(currentSummary);
+
+	}
+
+	// error: function (somethingWentWrong) {
+	//
+	// }
+
 });
 
-// //Gets and stores current weather info based on constructed URL above
-// app.getCurrentWeatherInfo = function(){
-//
-// 	// weatherUrl hooks up to URL
-// 	// puts data into currentWeatherData
-// 	$.get(weatherUrl, function( currentWeatherData ){
-//
-// 		// Raw temp data
-// 		var currentTemperature = currentWeatherData.currently.temperature;
-// 		var currentLocationName = currentWeatherData.timezone;
-//
-// 		// Round down temperature and convert to C, then put '℃' at the end
-// 		var currentTempInCelsius =  Math.round( currentTemperature - 32 * 0.5556 ) +'℃';
-//
-// 		// // print
-// 		// console.log( 'Temp in K: ' + inKelvin );
-// 		// console.log( 'Temp in C: ' + currentTempInCelsius );
-//
-// 		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
-// 		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
-//
-//
-//
-// 	});
-//
-// };
+//When page loads - TODO: add in geolocation step at start
+app.init = function() {
 
-// When page loads - TODO: add in geolocation step at start
-app.init = function(){
-
-		// uses constructed URL to display location name and weather info
+		//ajax
 		$.ajax();
 
 		// prints constructed URL in console for debugging purposes
@@ -109,5 +110,6 @@ app.init = function(){
 
 };
 
-// init the app
-app.init();
+// app.init()
+
+$(geoSuccess).load( console.log("This should show after lat and long load...") );
