@@ -48,38 +48,61 @@ var weatherUrl =
 
 ;
 
-//Gets and stores current weather info based on constructed URL above
-app.getCurrentWeatherInfo = function(){
 
-	// weatherUrl hooks up to URL
-	// puts data into currentWeatherData
-	$.get(weatherUrl, function( currentWeatherData ){
+$.ajax({
+  url: weatherUrl,
+  dataType: "jsonp",
+  success: function (currentWeatherData) {
 
-		// Raw temp data
-		var currentTemperature = currentWeatherData.currently.temperature;
-		var currentLocationName = currentWeatherData.timezone;
+			console.log('Dark Sky is working!');
 
-		// Round down temperature and convert to C, then put '℃' at the end
-		var currentTempInCelsius =  Math.round( currentTemperature - 32 * 0.5556 ) +'℃';
+			console.log(currentWeatherData);
 
-		// // print
-		// console.log( 'Temp in K: ' + inKelvin );
-		// console.log( 'Temp in C: ' + currentTempInCelsius );
+			// Raw temp data
+			var currentTemperature = currentWeatherData.currently.temperature;
+			var currentLocationName = currentWeatherData.timezone;
 
-		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
-		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
+			// Round down temperature and convert to C, then put '℃' at the end
+			var currentTempInCelsius =  Math.round( (currentTemperature - 32) * 0.5556 ) +'℃';
 
+			$( '.thermometer h1:first-of-type' ).text( currentLocationName );
+			$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
 
+  }
+});
 
-	});
-
-};
+// //Gets and stores current weather info based on constructed URL above
+// app.getCurrentWeatherInfo = function(){
+//
+// 	// weatherUrl hooks up to URL
+// 	// puts data into currentWeatherData
+// 	$.get(weatherUrl, function( currentWeatherData ){
+//
+// 		// Raw temp data
+// 		var currentTemperature = currentWeatherData.currently.temperature;
+// 		var currentLocationName = currentWeatherData.timezone;
+//
+// 		// Round down temperature and convert to C, then put '℃' at the end
+// 		var currentTempInCelsius =  Math.round( currentTemperature - 32 * 0.5556 ) +'℃';
+//
+// 		// // print
+// 		// console.log( 'Temp in K: ' + inKelvin );
+// 		// console.log( 'Temp in C: ' + currentTempInCelsius );
+//
+// 		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
+// 		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempInCelsius + '</p>' );
+//
+//
+//
+// 	});
+//
+// };
 
 // When page loads - TODO: add in geolocation step at start
 app.init = function(){
 
 		// uses constructed URL to display location name and weather info
-		app.getCurrentWeatherInfo();
+		$.ajax();
 
 		// prints constructed URL in console for debugging purposes
 		console.log( 'Source URL: '+ weatherUrl );
