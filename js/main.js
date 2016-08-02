@@ -22,28 +22,30 @@ var app = {};
 // Contains location data - TODO: make dynamic with HTML getLocation
 var currentLocationData = {
 
-	longitude: '-0.098994',
-	latitude: '51.5616944'
+	latitude: '51.5616944',
+	longitude: '-0.098994'
 
 };
+
 
 //URL constructed by feeding off currentLocationData above
 var weatherUrl =
 
 	//base URL
-	'http://api.openweathermap.org/data/2.5/weather?' +
+	'https://api.forecast.io/forecast/' +
+
+	//api key
+	'82e82db3154d05e7a280bb8c248adee1' +
 
 	// latitude (from currentLocationData, above)
-	'lat=' +
+	'/' +
 	currentLocationData.latitude +
 
 	// longitude (from currentLocationData, above)
-	'&lon=' +
-	currentLocationData.longitude +
+	',' +
+	currentLocationData.longitude
 
-	//api key
-	'&APPID=' +
-	'ac87f301d099eb66d6de796e5fd50b47'
+
 ;
 
 //Gets and stores current weather info based on constructed URL above
@@ -54,14 +56,11 @@ app.getCurrentWeatherInfo = function(){
 	$.get(weatherUrl, function( currentWeatherData ){
 
 		// Raw temp data
-		var currentTemperature = currentWeatherData.main.temp;
-		var currentLocationName = currentWeatherData.name;
+		var currentTemperature = currentWeatherData.currently.temperature;
+		var currentLocationName = currentWeatherData.timezone;
 
-		// Round down temperature and stick 'F' at the end
-		// var inKelvin = Math.floor( currentTemperature )+'K';
-
-		// Round down temperature and stick 'C' at the end
-		var currentTempInCelsius =  Math.round(currentTemperature - 273.15) +'℃';
+		// Round down temperature and convert to C, then put '℃' at the end
+		var currentTempInCelsius =  Math.round( currentTemperature - 32 * 0.5556 ) +'℃';
 
 		// // print
 		// console.log( 'Temp in K: ' + inKelvin );
