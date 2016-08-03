@@ -26,7 +26,6 @@ if (navigator.geolocation) {
 //Obtain user location cordinatess
 var geoSuccess = function(position) {
 
-	console.log('geoSuccess fires');
 	console.log('lat =' + position.coords.latitude);
 	console.log('long =' + position.coords.longitude);
 
