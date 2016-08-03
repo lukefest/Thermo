@@ -26,10 +26,8 @@ if (navigator.geolocation) {
 //Obtain user location cordinatess
 var geoSuccess = function(position) {
 
-	console.log('lat =' + position.coords.latitude);
-	console.log('long =' + position.coords.longitude);
-
-	app.init();
+	console.log('geoSuccess lat =', + position.coords.latitude);
+	console.log('geoSuccess long =', + position.coords.longitude);
 
 };
 
@@ -136,18 +134,16 @@ app.updateWeatherInfo = function(currentWeatherData){
 };
 
 
-//When page loads - TODO: add in geolocation step at start
-app.init = function(currentWeatherData) {
-
-	console.log( 'app.init fires' );
-
-	console.log('api currentWeatherData outside: ' + currentWeatherData);
-
-	// app.updateWeatherInfo();
-
-	// prints constructed URL in console for debugging purposes
-
-};
+// //When page loads - TODO: add in geolocation step at start
+// app.init = function(currentWeatherData) {
+//
+// 	console.log( 'app.init fires' );
+//
+// 	// app.updateWeatherInfo();
+//
+// 	// prints constructed URL in console for debugging purposes
+//
+// };
 
 
 // $( geoSuccess ).ready(function() {
