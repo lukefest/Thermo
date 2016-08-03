@@ -32,8 +32,8 @@ var geoSuccess = function(position) {
 
 	var GEOlatitude = position.coords.latitude;
 	var GEOlongitude = position.coords.longitude;
-	console.log('GEOlat',GEOlatitude);
-	console.log('GEOlong',GEOlongitude);
+	console.log('GEOlat: ',GEOlatitude);
+	console.log('GEOlong: ',GEOlongitude);
 
 	app.makeUrl(GEOlatitude,GEOlongitude);
 
