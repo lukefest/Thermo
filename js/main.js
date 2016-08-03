@@ -17,23 +17,24 @@ var app = {};
 
 // check for Geolocation support
 if (navigator.geolocation) {
-	console.log('Geolocation is supported!');
+	console.log('Geolocation is working...');
 	}
 	else {
   console.log('Geolocation is not supported for this Browser/OS version yet.');
 }
 
 //Obtain user location cordinatess
+var geoSuccess = function(position) {
 
-	var startPos;
-	var geoSuccess = function(position) {
-	  startPos = position;
-	  console.log('lat =' + startPos.coords.latitude);
-	  console.log('long =' + startPos.coords.longitude);
-		console.log( geoSuccess );
-	};
-	navigator.geolocation.getCurrentPosition(geoSuccess)
-;
+	console.log('geoSuccess fires');
+	console.log('lat =' + position.coords.latitude);
+	console.log('long =' + position.coords.longitude);
+
+	app.init();
+
+};
+
+navigator.geolocation.getCurrentPosition(geoSuccess);
 
 // Contains location data - TODO: make dynamic with HTML getLocation
 var currentLocationData = {
@@ -65,51 +66,93 @@ var weatherUrl =
 
 ;
 
-// uses constructed URL to display location name and weather info
+var currentWeatherData;
+
+// uses constructed URL (weatherUrl) to get weather data
 $.ajax( {
 	url: weatherUrl,
 	dataType: "jsonp",
 
-	success: function (currentWeatherData) {
+	success: function (data) {
 
-		console.log('Dark Sky is working!');
+		console.log( 'AJAX fires, source URL: '+ weatherUrl );
+		console.log('api toplevel data???: ' + data);
+		console.log('api sublevel data: ' + data.minutely.summary);
 
-		console.log(currentWeatherData);
+		// Create variable object for api data
+		currentWeatherData = {
 
-		// Create raw weather data variables
-		var currentTemperature = currentWeatherData.currently.temperature;
-		var currentLocationName = currentWeatherData.timezone;
-		var currentSummary = currentWeatherData.minutely.summary;
-		var currentIcon = currentWeatherData.currently.icon;
+			locationName: data.timezone,
+			temperature: data.currently.temperature,
+			summary: data.minutely.summary,
+			icon: data.currently.icon,
+			tempRounded: Math.round( data.currently.temperature )
 
-		// Round down temperature and convert to C, then put '℃' at the end
-		var currentTempRounded =  Math.round( currentTemperature );
+		};
 
-		$( '.thermometer h1:first-of-type' ).text( currentLocationName );
-		$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentTempRounded+'℃' + '</p>' );
-		$( '.summary' ).text( currentSummary );
+		// var currentLocationName = currentWeatherData.timezone;
+		// var currentTemperature = currentWeatherData.currently.temperature;
+		// var currentSummary = currentWeatherData.minutely.summary;
+		// var currentIcon = currentWeatherData.currently.icon;
+		// // Round down temperature and convert to C, then put '℃' at the end
+		// var currentTempRounded =  Math.round( currentTemperature );
 
-		// console.log(currentSummary);
+		// console.log('api currentWeatherData inside: ' + currentWeatherData);
+		// console.log('api currentWeatherData inside====>> ', currentWeatherData);
+
+		//spits out api data
+		// return currentWeatherData;
+
+		app.updateWeatherInfo(currentWeatherData);
 
 	}
-
 	// error: function (somethingWentWrong) {
 	//
 	// }
 
 });
 
-//When page loads - TODO: add in geolocation step at start
-app.init = function() {
 
-		//ajax
-		$.ajax();
 
-		// prints constructed URL in console for debugging purposes
-		console.log( 'Source URL: '+ weatherUrl );
+// uses weather variables to display location name and weather info
+app.updateWeatherInfo = function(currentWeatherData){
+
+	// var data = currentWeatherData;
+	console.log('data is here====>', currentWeatherData);
+
+	console.log('app.updateWeatherInfo fires');
+
+	console.log('api data in updateWeatherInfo???: ' + currentWeatherData);
+
+	console.log(' - Location: ' + currentWeatherData.locationName);
+	$( '.thermometer h1:first-of-type' ).text( currentWeatherData.locationName );
+
+	console.log(' - Temp Rounded: ' + currentWeatherData.tempRounded);
+	$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentWeatherData.tempRounded +'℃' + '</p>' );
+
+	console.log(' - Summary: ' + currentWeatherData.summary);
+	$( '.summary' ).text( currentWeatherData.summary );
+
 
 };
 
-// app.init()
 
-$(geoSuccess).load( console.log("This should show after lat and long load...") );
+//When page loads - TODO: add in geolocation step at start
+app.init = function(currentWeatherData) {
+
+	console.log( 'app.init fires' );
+
+	console.log('api currentWeatherData outside: ' + currentWeatherData);
+
+	// app.updateWeatherInfo();
+
+	// prints constructed URL in console for debugging purposes
+
+};
+
+
+// $( geoSuccess ).ready(function() {
+//
+//
+//
+// });
