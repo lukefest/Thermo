@@ -2,9 +2,9 @@
 
 - Sign up for openweathermap.org and generate an API key.
 - User either $.ajax or $.get to pull weather current data for London
-- Print the temperature in console.
+- Print the currentTemperature in console.
 - Possible next steps
-- 1: Display the temperature in the UI rather than the console
+- 1: Display the currentTemperature in the UI rather than the console
 - 2: Display an icon or image depending on the current weather
 - 3: add a form prompting user for the city.
 - 4: add a toggle for switching between farenheit and celcius
@@ -15,67 +15,144 @@
 // App container... that doesnt seem to contain anything
 var app = {};
 
+// check for Geolocation support
+if (navigator.geolocation) {
+	console.log('Geolocation is working...');
+	}
+	else {
+  console.log('Geolocation is not supported for this Browser/OS version yet.');
+}
+
+//Obtain user location cordinatess
+var geoSuccess = function(position) {
+
+	console.log('geoSuccess fires');
+	console.log('lat =' + position.coords.latitude);
+	console.log('long =' + position.coords.longitude);
+
+	app.init();
+
+};
+
+navigator.geolocation.getCurrentPosition(geoSuccess);
+
 // Contains location data - TODO: make dynamic with HTML getLocation
 var currentLocationData = {
 
-	longitude: '-0.098994',
-	latitude: '51.5616944'
+	latitude: '51.5616944',
+	longitude: '-0.098994'
 
 };
 
-//Smart URL feeding off currentLocationData
+//URL constructed by feeding off currentLocationData above
 var weatherUrl =
 
 	//base URL
-	'http://api.openweathermap.org/data/2.5/weather?' +
+	'https://api.forecast.io/forecast/' +
+
+	//api key
+	'82e82db3154d05e7a280bb8c248adee1' +
 
 	// latitude (from currentLocationData, above)
-	'lat=' +
+	'/' +
 	currentLocationData.latitude +
 
 	// longitude (from currentLocationData, above)
-	'&lon=' +
+	',' +
 	currentLocationData.longitude +
 
-	//api key
-	'&APPID=' +
-	'ac87f301d099eb66d6de796e5fd50b47'
+	// sets to local units
+	'?units=auto'
+
 ;
 
-//Stores current weather
-app.getCurrentWeather = function(){
+var currentWeatherData;
 
-	// weatherUrl hooks up to URL
-	// puts data into currentWeatherData
-	$.get(weatherUrl, function( currentWeatherData ){
+// uses constructed URL (weatherUrl) to get weather data
+$.ajax( {
+	url: weatherUrl,
+	dataType: "jsonp",
 
-		// Raw temp data
-		var temperature = currentWeatherData.main.temp;
+	success: function (data) {
 
-		// Round down and stick 'F' at the end
-		// var inKelvin = Math.floor( temperature )+'K';
+		console.log( 'AJAX fires, source URL: '+ weatherUrl );
+		console.log('api toplevel data???: ' + data);
+		console.log('api sublevel data: ' + data.minutely.summary);
 
-		// Round down and stick 'C' at the end
-		var inCelsius =  Math.round(temperature - 273.15) +'℃';
+		// Create variable object for api data
+		currentWeatherData = {
 
-		// // print
-		// console.log( 'Temp in K: ' + inKelvin );
-		// console.log( 'Temp in C: ' + inCelsius );
+			locationName: data.timezone,
+			temperature: data.currently.temperature,
+			summary: data.minutely.summary,
+			icon: data.currently.icon,
+			tempRounded: Math.round( data.currently.temperature )
 
-		$( '.js_temprature' ).append( inCelsius );
+		};
 
-	});
+		// var currentLocationName = currentWeatherData.timezone;
+		// var currentTemperature = currentWeatherData.currently.temperature;
+		// var currentSummary = currentWeatherData.minutely.summary;
+		// var currentIcon = currentWeatherData.currently.icon;
+		// // Round down temperature and convert to C, then put '℃' at the end
+		// var currentTempRounded =  Math.round( currentTemperature );
+
+		// console.log('api currentWeatherData inside: ' + currentWeatherData);
+		// console.log('api currentWeatherData inside====>> ', currentWeatherData);
+
+		//spits out api data
+		// return currentWeatherData;
+
+		app.updateWeatherInfo(currentWeatherData);
+
+	}
+	// error: function (somethingWentWrong) {
+	//
+	// }
+
+});
+
+
+
+// uses weather variables to display location name and weather info
+app.updateWeatherInfo = function(currentWeatherData){
+
+	// var data = currentWeatherData;
+	console.log('data is here====>', currentWeatherData);
+
+	console.log('app.updateWeatherInfo fires');
+
+	console.log('api data in updateWeatherInfo???: ' + currentWeatherData);
+
+	console.log(' - Location: ' + currentWeatherData.locationName);
+	$( '.thermometer h1:first-of-type' ).text( currentWeatherData.locationName );
+
+	console.log(' - Temp Rounded: ' + currentWeatherData.tempRounded);
+	$( '.spinner' ).replaceWith( '<p class="js_temprature">' + currentWeatherData.tempRounded +'℃' + '</p>' );
+
+	console.log(' - Summary: ' + currentWeatherData.summary);
+	$( '.summary' ).text( currentWeatherData.summary );
+
 
 };
 
-// What happens on init
-app.init = function(){
 
-		app.getCurrentWeather();
+//When page loads - TODO: add in geolocation step at start
+app.init = function(currentWeatherData) {
 
-		console.log( 'Source URL: '+ weatherUrl );
+	console.log( 'app.init fires' );
+
+	console.log('api currentWeatherData outside: ' + currentWeatherData);
+
+	// app.updateWeatherInfo();
+
+	// prints constructed URL in console for debugging purposes
 
 };
 
-// init the app
-app.init();
+
+// $( geoSuccess ).ready(function() {
+//
+//
+//
+// });

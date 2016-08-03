@@ -121,6 +121,13 @@ Load fonts
       font-family:"RobotoDraft", sans-serif;
    }
 
+   .thermometer {
+       display: block;
+       width: 100%;
+       text-align: center;
+       z-index:1;
+   }
+
    h1 {
       text-align: center;
       top: 2em;
@@ -132,31 +139,70 @@ Load fonts
    .js_temprature {
       display:block;
       position: relative;
-      color: rgba(255, 255, 255, 0.6);
+      /*height: 4em;*/
+      color: rgba(255, 255, 255, 0.9);
       font-size: calc(100vw/100*20);
-      margin-top: 20vh;
       z-index:2;
       font-weight: 400;
+      -webkit-margin-before: 0.2em;
+      -webkit-margin-after: 0.2em;
    }
 
-   .temprature_bg {
-       display: block;
-       width: 100%;
-       text-align: center;
-       z-index:1;
+   .summary {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 2em;
+      font-weight: 300;
    }
 
+   /* ========= SPINNER ========= */
 
+   .spinner {
+     display: inline-block;
+     position: relative;
+     width: calc(100vw/100*10);
+     height: calc(100vw/100*10);
+     margin-top: 13vh;
+   }
 
+   /*.spinner_hidden {
+     visibility: hidden;
+   }*/
 
+   .double-bounce1, .double-bounce2 {
+     width: 100%;
+     height: 100%;
+     border-radius: 50%;
+     background-color: #FFF;
+     opacity: 0.6;
+     position: absolute;
+     top: 0;
+     left: 0;
 
+     -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+     animation: sk-bounce 2.0s infinite ease-in-out;
+   }
 
+   .double-bounce2 {
+     -webkit-animation-delay: -1.0s;
+     animation-delay: -1.0s;
+   }
 
+   @-webkit-keyframes sk-bounce {
+     0%, 100% { -webkit-transform: scale(0.0) }
+     50% { -webkit-transform: scale(1.0) }
+   }
 
+   @keyframes sk-bounce {
+     0%, 100% {
+       transform: scale(0.0);
+       -webkit-transform: scale(0.0);
+     } 50% {
+       transform: scale(1.0);
+       -webkit-transform: scale(1.0);
+     }
+   }
 
-
-
-
+    /* ========= SPINNER END ========= */
 
 
 /* ==========================================================================
