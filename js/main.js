@@ -1,13 +1,7 @@
 /*
 
-- Sign up for openweathermap.org and generate an API key.
-- User either $.ajax or $.get to pull weather current data for London
-- Print the currentTemperature in console.
-- Possible next steps
-- 1: Display the currentTemperature in the UI rather than the console
-- 2: Display an icon or image depending on the current weather
-- 3: add a form prompting user for the city.
-- 4: add a toggle for switching between farenheit and celcius
+Thermo weather app V0.1
+Luke Forsythe
 
 */
 
@@ -26,14 +20,12 @@ if (navigator.geolocation) {
 //Obtain user location cordinatess
 var geoSuccess = function(position) {
 
-
 	console.log('geoSuccess fires');
-	console.log('lat =' + position.coords.latitude);
-	console.log('long =' + position.coords.longitude);
 
 	var GEOlatitude = position.coords.latitude;
-	var GEOlongitude = position.coords.longitude;
 	console.log('GEOlat: ',GEOlatitude);
+
+	var GEOlongitude = position.coords.longitude;
 	console.log('GEOlong: ',GEOlongitude);
 
 	app.makeUrl(GEOlatitude,GEOlongitude);
@@ -42,16 +34,6 @@ var geoSuccess = function(position) {
 };
 
 navigator.geolocation.getCurrentPosition(geoSuccess);
-
-// // Contains location data - TODO: make dynamic with HTML getLocation
-// var currentLocationData = {
-//
-// 	latitude: GEOlatitude,
-// 	longitude: GEOlongitude
-//
-// };
-
-//URL constructed by feeding off currentLocationData above
 
 app.makeUrl = function(GEOlatitude,GEOlongitude) {
 
@@ -71,55 +53,38 @@ app.makeUrl = function(GEOlatitude,GEOlongitude) {
 		'?units=auto'
 		;
 
-	console.log(weatherUrl);
-
 	app.doAjax(weatherUrl);
 
 };
 
 app.doAjax = function(weatherUrl) {
 
-// uses constructed URL (weatherUrl) to get weather data
-$.ajax( {
-	url: weatherUrl,
-	dataType: "jsonp",
+	// uses constructed URL (weatherUrl) to get weather data
+	$.ajax( {
+		url: weatherUrl,
+		dataType: "jsonp",
 
-	success: function (data) {
+		success: function (data) {
 
-		console.log( 'AJAX fires, source URL: '+ weatherUrl );
-		console.log('api toplevel data???: ' + data);
-		console.log('api sublevel data: ' + data.minutely.summary);
+			//Print constructed URL
+			console.log( 'AJAX fires, source URL: '+ weatherUrl );
 
-		// Create variable object for api data
-		var	currentWeatherData = {
+			// Create variable object for api data
+			var	currentWeatherData = {
 
-			locationName: data.timezone,
-			temperature: data.currently.temperature,
-			summary: data.minutely.summary,
-			icon: data.currently.icon,
-			tempRounded: Math.round( data.currently.temperature )
+				locationName: data.timezone,
+				temperature: data.currently.temperature,
+				summary: data.minutely.summary,
+				icon: data.currently.icon,
+				tempRounded: Math.round( data.currently.temperature )
 
-		};
+			};
 
-		// var currentLocationName = currentWeatherData.timezone;
-		// var currentTemperature = currentWeatherData.currently.temperature;
-		// var currentSummary = currentWeatherData.minutely.summary;
-		// var currentIcon = currentWeatherData.currently.icon;
-		// // Round down temperature and convert to C, then put '℃' at the end
-		// var currentTempRounded =  Math.round( currentTemperature );
+			app.updateWeatherInfo(currentWeatherData);
 
-		// console.log('api currentWeatherData inside: ' + currentWeatherData);
-		// console.log('api currentWeatherData inside====>> ', currentWeatherData);
+		}
 
-		//spits out api data
-		// return currentWeatherData;
-
-		app.updateWeatherInfo(currentWeatherData);
-
-	}
-	// error: function (somethingWentWrong) {
-	//
-	// }
+		// error: function (somethingWentWrong) { }
 
 });
 
@@ -131,19 +96,20 @@ app.updateWeatherInfo = function(weatherData){
 
 
 	// var data = weatherData;
-	console.log('data is here====>', weatherData);
 
-	console.log('app.updateWeatherInfo fires');
-
-	console.log('api data in updateWeatherInfo???: ' + weatherData);
-
+	// Print Location
 	console.log(' - Location: ' + weatherData.locationName);
+	// Location
 	$( '.thermometer h1:first-of-type' ).text( weatherData.locationName );
 
+	// Print Temp Rounded
 	console.log(' - Temp Rounded: ' + weatherData.tempRounded);
+	// Temp Rounded
 	$( '.spinner' ).replaceWith( '<p class="js_temprature">' + weatherData.tempRounded +'℃' + '</p>' );
 
+	// Print Summary
 	console.log(' - Summary: ' + weatherData.summary);
+	// Summary
 	$( '.summary' ).text( weatherData.summary );
 
 
